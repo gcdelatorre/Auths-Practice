@@ -98,6 +98,34 @@ app.post("/login", async (req, res) => {
     }
 })
 
+// 3 Logout account controller
+app.post("/logout", async (req, res) => {
+    try {
+        // get refresh token from cookies
+        const refreshToken = req.cookies.refreshToken;
+
+        // check if token exists, update and change to null
+        if (refreshToken) {
+            await User.findOneAndUpdate(
+                { refreshToken },
+                { refreshToken: null }
+            )
+        }
+
+        // clear cookie
+        res.clearCookie("refreshToken", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict"
+        });
+
+        // send response
+        res.status(200).json({ message: "Logged out successfully", success: true });
+
+    } catch (err) {
+        res.status(500).json({ message: err.message, success: false });
+    }
+})
 
 
 app.listen(process.env.PORT, () => {
