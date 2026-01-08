@@ -1,0 +1,3 @@
+This repository is a practice project focused on learning and experimenting with authentication and authorization concepts in a backend application.
+
+The goal is to understand how common auth-related tools work together, including JWT, cookies, CORS, password hashing, etc...
