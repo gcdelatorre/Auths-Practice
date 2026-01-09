@@ -10,14 +10,16 @@ export const createRefreshToken = (userId) => {
 
 export const sendAccessToken = (req, res, accessToken) => {
     res.status(200).json({
+        success: true,
         accessToken,
-        email: req.body.email
     });
 }
 
 export const sendRefreshToken = (res, refreshToken) => {
     res.cookie("refreshtoken", refreshToken, {
-        httpOnly: true,
-        path: "/refresh_token",
+        httpOnly: true, // prevents JavaScript access (XSS protection)
+        sameSite: "strict", // blocks cross-site requests (CSRF protection)
+        secure: process.env.NODE_ENV === "production", // HTTPS-only in production
+        path: "/refresh_token", // only sent to the refresh endpoint
     });
-}
+};
