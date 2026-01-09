@@ -16,6 +16,7 @@ import User from "../models/user.model.js";
 
 // utils imports
 import { createAccessToken, createRefreshToken, sendAccessToken, sendRefreshToken } from "../utils/token.js";
+import { isAuth } from "../middlewares/isAuth.js";
 
 connectDB();
 
@@ -126,6 +127,14 @@ app.post("/logout", async (req, res) => {
         res.status(500).json({ message: err.message, success: false });
     }
 })
+
+// 4 Protected route setup 
+app.post("/protected", isAuth, async (req, res) => {
+    const user = await User.findById(req.user.userId)
+    const email = user.email;
+    res.status(200).json({ message: `Hello ${email}, this is a protected route`, success: true })
+})
+
 
 
 app.listen(process.env.PORT, () => {
