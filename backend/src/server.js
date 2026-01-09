@@ -135,6 +135,43 @@ app.post("/protected", isAuth, async (req, res) => {
     res.status(200).json({ message: `Hello ${email}, this is a protected route`, success: true })
 })
 
+// 5 Get new access token with refresh token
+app.post("/refresh_token", async (req, res) => {
+    // 1️⃣ Get the refresh token from the request cookies
+    const token = req.cookies.refreshtoken
+
+    if (!token) return res.status(401).json({ message: "Unauthorized" })
+
+    let decoded = null;
+
+    try {
+        // 2️⃣ Verify the refresh token
+        decoded = verify(token, process.env.REFRESH_TOKEN_SECRET)
+
+        // 3️⃣ Find the user with this token in the database, check if it exists
+        const user = await User.findOne({ _id: decoded.userId, refreshToken: token })
+        if (!user) return res.status(401).json({ message: "Unauthorized" })
+
+        // 4️⃣ Create new Rotation tokens
+        const newAccessToken = createAccessToken(user._id)
+        const newRefreshToken = createRefreshToken(user._id)
+
+        // 5️⃣ Save new refresh token to the database (old one becomes invalid)
+        user.refreshToken = newRefreshToken
+        await user.save()
+
+        // 6️⃣ Send new tokens
+        sendRefreshToken(res, newRefreshToken)
+        sendAccessToken(req, res, newAccessToken)
+    } catch (err) {
+        return res.status(401).json({
+            message: err.name === "TokenExpiredError"
+                ? "Refresh token expired"
+                : "Invalid refresh token"
+        });
+    }
+})
+
 
 
 app.listen(process.env.PORT, () => {
