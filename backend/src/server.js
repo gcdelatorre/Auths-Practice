@@ -114,9 +114,9 @@ app.post("/logout", async (req, res) => {
 
         // clear cookie
         res.clearCookie("refreshToken", {
-            httpOnly: true,
-            secure: true,
-            sameSite: "strict"
+            httpOnly: true, // ensures only the browser can handle it, not JS
+            secure: true, // ensures it’s only sent over HTTPS
+            sameSite: "strict" // prevents CSRF (cross-site request forgery) attacks
         });
 
         // send response
