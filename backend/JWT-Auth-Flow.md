@@ -53,5 +53,5 @@ This document explains JWT authentication in a MERN application, focusing on pro
 * Access token = short-lived identity token
 * Refresh token = used to generate new access tokens
 * Middleware injects `req.user` → controllers use it for user-specific operations
-* `req.user` can store more info (role, email) for scalability
+* `req.user` can store more info (role, email) for scalability and can also be used for authorization
 * Ensures secure, user-specific access in a MERN application
