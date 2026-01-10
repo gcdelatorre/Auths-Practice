@@ -103,7 +103,7 @@ app.post("/login", async (req, res) => {
 app.post("/logout", async (req, res) => {
     try {
         // get refresh token from cookies
-        const refreshToken = req.cookies.refreshToken;
+        const refreshToken = req.cookies.refreshtoken;
 
         // check if token exists, update and change to null
         if (refreshToken) {
@@ -114,7 +114,8 @@ app.post("/logout", async (req, res) => {
         }
 
         // clear cookie
-        res.clearCookie("refreshToken", {
+        res.clearCookie("refreshtoken", {
+            path: "/refresh_token", // this clears the cookie and token in the /refresh_token path when logging out, so it can't be used again and is invalidated for security
             httpOnly: true, // ensures only the browser can handle it, not JS
             secure: true, // ensures it’s only sent over HTTPS
             sameSite: "strict" // prevents CSRF (cross-site request forgery) attacks
