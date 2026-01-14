@@ -4,7 +4,7 @@ export default function App() {
 
   return (
     <>
-      <div>
+      <div className="bg-slate-200 h-screen flex items-center justify-center">
         App
       </div>
     </>
