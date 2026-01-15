@@ -35,7 +35,7 @@ const app = express();
 app.use(cookieParser());
 
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "http://localhost:5173"],
     credentials: true,
 }));
 
@@ -117,7 +117,7 @@ app.post("/logout", async (req, res) => {
         res.clearCookie("refreshtoken", {
             path: "/refresh_token", // this clears the cookie and token in the /refresh_token path when logging out, so it can't be used again and is invalidated for security
             httpOnly: true, // ensures only the browser can handle it, not JS
-            secure: true, // ensures it’s only sent over HTTPS
+            secure: process.env.NODE_ENV === "production", // match how cookie was set
             sameSite: "strict" // prevents CSRF (cross-site request forgery) attacks
         });
 
