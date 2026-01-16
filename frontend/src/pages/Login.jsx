@@ -20,7 +20,7 @@ function Login() {
     try {
       // Make the API call to log the user in
       await loginRequest(email, password);
-      // If the login is successful, update the global authentication state
+      // If the login is successful, update the global authentication state so that the isAuthenticated value becomes true
       login();
       // Redirect the user to the protected page
       navigate('/protected');
