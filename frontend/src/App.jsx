@@ -13,7 +13,6 @@ function App() {
       <Navbar />
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/logout" element={<Logout />} />
@@ -25,6 +24,7 @@ function App() {
           If the user is not authenticated, it will redirect them to the /login page.
         */}
         <Route element={<ProtectedRoute />}>
+          <Route path="/home" element={<Home />} />
           <Route path="/protected" element={<Protected />} />
           {/* Add other protected routes here */}
         </Route>
